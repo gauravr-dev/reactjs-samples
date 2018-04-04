@@ -4,7 +4,11 @@ import { Segment, List, Dropdown } from 'semantic-ui-react';
 
 import './App.css';
 import HTMLEditor from './Editor';
-
+/*
+<List.Content floated='right'>
+  <PageOptionMenu icon="trello" onOptionChange={(e,value) => console.log("selected option", value)} />
+</List.Content>
+*/
 
 class PageOptionMenu extends Component {
   constructor(props) {
@@ -44,13 +48,7 @@ class PageOptionMenu extends Component {
     ]
 
     this.state = { options: pageOptions }
-    //this.props.onOptionChange = this.props.onOptionChange.bind(this)
   }
-
-  // onOptionChange(e, value)
-  // {
-  //  return value;
-  // }
 
   render() {
     var self = this
@@ -58,7 +56,6 @@ class PageOptionMenu extends Component {
       <Dropdown icon={this.props.icon} pointing="top right" className='link item' >
         <Dropdown.Menu>
           {
-            
             this.state.options.map(function (option, idx, pages) {
               return (
                 option.name === "trash" ? 
@@ -78,19 +75,20 @@ class PageOptionMenu extends Component {
 
 
 class PageList extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    var self = this
     return (
       <React.Fragment>
         <List>
           {
             this.props.pages.map(function (page, idx, pages) {
               return (
-                <List.Item key={page.pageId}>
+                <List.Item key={page.pageId} onClick={(e, data) => self.props.onPageSelect(page)}>
                   <Segment>
-                    <List.Content floated='right'>
-                      {/* <Button icon=""> */}
-                      <PageOptionMenu icon="trello" onOptionChange={(e,value) => console.log("selected option", value)} />
-                    </List.Content>
                     <List.Content>
                       <List.Header as="h2">{page.title}</List.Header>
                       <p>{page.description}</p>
@@ -118,7 +116,7 @@ class App extends Component {
         "pageId": "1",
         "title": "About",
         "description": "This page will serve the listing of all blog entries",
-        "content": "",
+        "content": "This page will serve the listing of all blog entries",
         "created": "21/03/2018",
         "updated": "21/03/2018"
       },
@@ -126,7 +124,7 @@ class App extends Component {
         "pageId": "2",
         "title": "About",
         "description": "This is about us page.",
-        "content": "",
+        "content": "descriptionm This is about us page.",
         "created": "21/03/2018",
         "updated": "21/03/2018"
       },
@@ -139,18 +137,15 @@ class App extends Component {
         "updated": "21/03/2018"
       }
     ]
-    this.state = { pages: blogPages }
+    this.state = { pages: blogPages, editPage:false, page:null }
   }
 
-  componentDidMount() {
-
-  }
   render() {
+    var orgThis = this
     return (
       <div>
-        <PageList pages={this.state.pages} />
-
-        <HTMLEditor />
+        <PageList pages={this.state.pages} onPageSelect={(page) => { orgThis.setState({...orgThis.state, editPage: true, page: page}); console.log(orgThis.state);}} />
+        { this.state.editPage ? <HTMLEditor page={this.state.page} /> : "" }
       </div>
     );
   }

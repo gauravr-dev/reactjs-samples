@@ -15,7 +15,7 @@ require('medium-editor/dist/css/themes/roman.css');
 class HTMLEditor extends Component {
     constructor(props) {
         super(props)
-        this.state = { text: '' } // You can also pass a Quill Delta here
+        this.state = { text: this.props.page.content } // You can also pass a Quill Delta here
         this.handleChange = this.handleChange.bind(this)
     }
 
