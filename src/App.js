@@ -44,17 +44,29 @@ class PageOptionMenu extends Component {
     ]
 
     this.state = { options: pageOptions }
+    //this.props.onOptionChange = this.props.onOptionChange.bind(this)
   }
 
+  // onOptionChange(e, value)
+  // {
+  //  return value;
+  // }
+
   render() {
+    var self = this
     return (
-      <Dropdown icon={this.props.icon} pointing="top right" className='link item'>
+      <Dropdown icon={this.props.icon} pointing="top right" className='link item' >
         <Dropdown.Menu>
           {
+            
             this.state.options.map(function (option, idx, pages) {
               return (
-                option.name === "trash" ? <React.Fragment><Dropdown.Divider /><Dropdown.Item key={option.name} >{option.name}</Dropdown.Item></React.Fragment> :
-                  <Dropdown.Item key={option.name}>{option.name}</Dropdown.Item>
+                option.name === "trash" ? 
+                  <React.Fragment>
+                    <Dropdown.Divider />
+                    <Dropdown.Item key={option.name} onClick={self.props.onOptionChange} >{option.name}</Dropdown.Item>
+                  </React.Fragment> :
+                  <Dropdown.Item key={option.name} onClick={self.props.onOptionChange} >{option.name} </Dropdown.Item>
               )
             })
           }
@@ -77,7 +89,7 @@ class PageList extends Component {
                   <Segment>
                     <List.Content floated='right'>
                       {/* <Button icon=""> */}
-                      <PageOptionMenu icon="trello" />
+                      <PageOptionMenu icon="trello" onOptionChange={(e,value) => console.log("selected option", value)} />
                     </List.Content>
                     <List.Content>
                       <List.Header as="h2">{page.title}</List.Header>
